@@ -1,0 +1,911 @@
+/* General styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+}
+
+/*calendario*/
+/* Ajuste para que los textos de fechas se muestren de forma más limpia */
+.week-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Separar la fecha de la flecha */
+.week-selector {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 1.2rem;
+}
+
+.week-selector .form-control {
+  border: 2px solid #5d87e4;
+  padding: 5px 10px;
+  font-size: 1rem;
+  border-radius: 5px;
+  max-width: 150px;
+  color: #555;
+}
+
+.week-selector i {
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.3s ease;
+}
+
+.week-selector i:hover {
+  color: #0056b3;
+}
+
+/*fin calendario*/
+
+.topnav {
+  overflow: hidden;
+  background-color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+}
+
+.topnav .openbtn {
+  font-size: 22px;
+  cursor: pointer;
+  background-color: #333;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+
+.topnav .openbtn:hover {
+  background-color: #444;
+}
+
+.topnav .configbtn {
+  color: #f2f2f2;
+  text-align: center;
+  text-decoration: none;
+  font-size: 17px;
+  padding-right: 15px;
+}
+
+.topnav .configbtn i {
+  font-size: 20px;
+}
+
+/* Estilo para el botón de vuelta */
+.back-button {
+  position: absolute; /* Posiciona el botón de forma absoluta respecto al contenedor */
+  top: 20px; /* Se posiciona 10px desde la parte superior */
+  left: 10px; /* Se posiciona 10px desde la izquierda */
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 13px;
+  z-index: 1000; /* Asegura que el botón se muestre encima de otros elementos */
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}
+
+.back-button:focus {
+  outline: none;
+}
+
+/* Asegúrate de que el contenedor tenga una posición relativa */
+#step4Diaria {
+  position: relative; /* Necesario para que el botón se posicione correctamente dentro de este contenedor */
+}
+#step4Semanal {
+  position: relative; /* Necesario para que el botón se posicione correctamente dentro de este contenedor */
+}
+
+#step2 {
+  position: relative; /* Necesario para que el botón se posicione correctamente dentro de este contenedor */
+}
+
+#step3 {
+  position: relative; /* Necesario para que el botón se posicione correctamente dentro de este contenedor */
+}
+
+/* Ajuste para asegurar que menú y configuración se ven encima */
+.menu,
+.config {
+  z-index: 1000; /* Encima de la superposición */
+}
+
+/* Configuración del menú de configuración para que se vea desde la izquierda */
+.config {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0; /* Cambiado para que abra desde la izquierda */
+  background-color: #111;
+  overflow-x: hidden;
+  padding-top: 60px;
+  transition: 0.5s;
+  color: #818181;
+}
+
+/* Encabezados de sección */
+.config .config-section {
+  padding: 10px 20px;
+  border-top: 1px solid #333;
+}
+
+.config h5 {
+  font-size: 14px;
+  color: #818181;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-weight: normal;
+}
+
+/* Links de la configuración */
+.config a {
+  padding: 8px 8px 8px 32px;
+  font-size: 20px;
+  color: #818181;
+  text-decoration: none;
+  display: block;
+  transition: 0.3s;
+}
+
+/* Color de los links al pasar el mouse */
+.config a:hover {
+  color: #f1f1f1;
+}
+
+/* Descripción debajo del enlace de Exportar */
+.config .config-description {
+  font-size: 12px;
+  color: #999;
+  margin-top: -8px;
+  padding-left: 32px;
+}
+
+/* Botón de cerrar en la parte superior */
+.config .closebtn {
+  position: absolute;
+  top: 0;
+  right: 10px; /* Cambiado para que esté en la parte superior izquierda */
+  font-size: 37px;
+  color: #818181;
+  cursor: pointer;
+}
+
+/* Estilos para los botones principales */
+.botones-principales {
+  display: flex; /* Flexbox para organizar botones en fila */
+  flex-wrap: wrap; /* Permite que los botones se envuelvan */
+  gap: 15px; /* Espaciado entre botones */
+  margin: 20px 0; /* Margen superior e inferior */
+}
+
+.botones-principales button {
+  flex: 1 1 calc(33% - 15px); /* Tres botones por fila con espacio */
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  background-color: rgb(164, 204, 223);
+  border: 1px solid rgb(47, 53, 47);
+  padding: 15px; /* Aumenta el padding */
+  border-radius: 5px; /* Bordes redondeados */
+  transition:
+    background-color 0.3s,
+    transform 0.2s; /* Transición suave */
+}
+
+/* Efecto hover en botones */
+.botones-principales button:hover {
+  background-color: rgb(130, 184, 204); /* Color más oscuro */
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+.img-fluid {
+  border-radius: 15px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(185, 116, 116, 0.1); /* Sombra */
+  margin-bottom: 50px; /* Espaciado inferior */
+}
+
+.container-fluid {
+  margin-top: 50px; /* Espaciado superior */
+  margin-bottom: 50px; /* Espaciado inferior */
+  padding: 0 50px; /* Espaciado lateral */
+}
+
+/* Ocultar contenido principal cuando el menú o la configuración están abiertos */
+.hidden-content {
+  display: none;
+}
+
+/* Superposición de fondo */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* Ajusta el nivel de oscurecimiento */
+  backdrop-filter: blur(2px); /* Desenfoque */
+  display: none; /* Oculto por defecto */
+  z-index: 900; /* Debajo del menú y configuración */
+}
+
+/* Estilos para la barra de opciones */
+.navbar {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para distinguir la barra */
+  margin-bottom: 20px;
+  align-items: center;
+  padding: 8px;
+}
+
+/* Espaciado adicional para los botones */
+.navbar .btn {
+  margin: 0 10px;
+}
+
+.centered-icon {
+  font-size: 30px; /* Tamaño del icono */
+  color: #ffffff; /* Color del icono */
+  opacity: 1.9; /* Opacidad para darle un toque visual */
+}
+
+/* Main content */
+#main {
+  transition: margin-left 0.5s;
+  padding: 16px;
+}
+
+.main a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.main a.active {
+  background-color: dodgerblue;
+  color: white;
+}
+
+/* Estilo mejorado para la sección de pasos */
+.content-section {
+  display: none;
+  margin: 30px auto;
+  padding: 30px;
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Título del paso */
+.content-section h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Estilo del label */
+.content-section label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 1.1em;
+}
+
+/* Estilo del select */
+.content-section select {
+  width: 100%;
+  padding: 12px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: border-color 0.3s ease;
+}
+
+/* Cambio de color en el select al enfoque */
+.content-section select:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+/* Color y estilo de la opción predeterminada */
+.content-section select option[disabled] {
+  color: #888;
+}
+
+.content-section {
+  position: relative;
+  display: none;
+  margin: 30px auto;
+  padding: 30px;
+  max-width: 600px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.content-section h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Estilos específicos para el contenedor de botones */
+.button-container {
+  display: flex; /* Flexbox para organizar los botones */
+  justify-content: space-around; /* Espacio entre los botones */
+  margin-top: 20px; /* Espacio superior */
+}
+
+/* Estilos específicos para los botones */
+.planning-button {
+  background-color: #007bff; /* Color de fondo del botón */
+  color: white; /* Color del texto */
+  font-size: 16px; /* Tamaño de la fuente */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  cursor: pointer; /* Cursor en forma de mano */
+  transition:
+    background-color 0.3s,
+    transform 0.3s; /* Efectos de transición */
+  flex: 1; /* Hacer que los botones ocupen el mismo espacio */
+  margin: 0 10px; /* Margen entre botones */
+}
+
+.planning-button:hover {
+  background-color: #0056b3; /* Color de fondo al pasar el mouse */
+  transform: scale(1.05); /* Aumentar tamaño al pasar el mouse */
+}
+
+/* Estilos para la sección de fecha y bloques */
+.planning-date {
+  display: block; /* Asegúrate de que se muestre correctamente */
+  text-align: center; /* Centramos todo el contenido */
+}
+
+.planning-date h2 {
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Contenedor de la navegación del calendario */
+/* Estilos para el grupo de formularios */
+.form-group {
+  margin: 20px 0; /* Espaciado vertical entre grupos */
+  text-align: center; /* Centramos el contenido */
+}
+
+/* Estilo del label */
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #555;
+  font-size: 1.1em;
+}
+
+/* Estilo del input de fecha */
+.date-input {
+  width: 100%; /* Ancho completo */
+  padding: 12px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  color: #333;
+  transition: border-color 0.3s ease;
+  max-width: 300px; /* Ancho máximo para un diseño más centrado */
+  margin: 0 auto; /* Centramos el input */
+}
+
+/* Cambio de color en el input de fecha al enfoque */
+.date-input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 123, 255, 0.4);
+}
+
+/* Estilo de la lista de bloques */
+.block-list {
+  list-style-type: none; /* Quitamos los puntos de la lista */
+  padding: 0; /* Sin padding */
+  margin: 10px 0; /* Espaciado vertical */
+}
+
+/* Estilo para los elementos de la lista de bloques */
+.block-list li {
+  padding: 10px;
+  border: 1px solid #007bff; /* Borde azul para resaltar los bloques */
+  border-radius: 5px; /* Bordes redondeados */
+  margin-bottom: 5px; /* Espaciado entre bloques */
+  background-color: #f0f8ff; /* Fondo claro para los bloques */
+  transition: background-color 0.3s; /* Transición para el hover */
+}
+
+/* Efecto hover para los bloques */
+.block-list li:hover {
+  background-color: #e0f7fa; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo para el botón de crear bloque */
+.create-block-button {
+  background-color: #6c757d; /* Color del botón */
+  color: white; /* Color del texto */
+  font-size: 16px; /* Tamaño de la fuente */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  cursor: pointer; /* Cursor en forma de mano */
+  transition: background-color 0.3s; /* Efectos de transición */
+  display: block; /* Aseguramos que esté en bloque */
+  margin: 10px auto; /* Centramos el botón */
+}
+
+/* Efecto hover para el botón de crear bloque */
+.create-block-button:hover {
+  background-color: #5a6268; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo para el botón de finalizar planificación */
+.finalize-button {
+  background-color: #28a745; /* Color verde */
+  color: white; /* Color del texto */
+  font-size: 16px; /* Tamaño de la fuente */
+  border: none; /* Sin borde */
+  border-radius: 5px; /* Bordes redondeados */
+  padding: 10px 20px; /* Espaciado interno */
+  cursor: pointer; /* Cursor en forma de mano */
+  transition: background-color 0.3s; /* Efectos de transición */
+  margin-top: 20px; /* Margen superior */
+  display: block; /* Aseguramos que esté en bloque */
+  margin-left: auto; /* Centramos el botón */
+  margin-right: auto; /* Centramos el botón */
+}
+
+/* Efecto hover para el botón de finalizar planificación */
+.finalize-button:hover {
+  background-color: #218838; /* Color de fondo al pasar el mouse */
+}
+
+.selected {
+  background-color: #d3f9d8; /* Color de fondo verde claro */
+}
+
+#texto {
+  margin-top: 20px; /* Espaciado superior */
+  text-align: center; /* Centramos el texto */
+}
+
+/* Estilos para el formulario de agregar, modificar y eliminar curso */
+#agregarCurso,
+#eliminarCurso,
+#modificarCurso {
+  background-color: #fff;
+  border: 1px solid #ddd; /* Borde gris claro */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#infoDeAgregado {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  background-color: #218838;
+  color: #fff;
+}
+
+#infoDeBloques {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  background-color: #218838;
+  color: #fff;
+}
+
+#infoDeEliminado {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  background-color: #ec1616;
+  color: #fff;
+}
+
+#infoDeModificado {
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 10px;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  background-color: #cab32f;
+  color: #000000;
+}
+
+#agregarCurso h2,
+#eliminarCurso h2,
+#modificarCurso h2 {
+  font-size: 1.75rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/*
+@media (max-width: 576px) {
+  .menu {
+    width: 200px;
+  }
+
+  .topnav {
+    padding: 5px;
+  }
+}*/
+
+/* Estilo para la barra de navegación */
+.topnav {
+  display: flex; /* Usar flexbox para organizar los elementos */
+  justify-content: space-between; /* Distribuir los elementos entre los extremos */
+  align-items: center; /* Alinear los elementos verticalmente al centro */
+  width: 100%; /* Asegura que ocupe todo el ancho */
+  padding: 10px; /* Espaciado alrededor de la barra */
+}
+
+/* Asegura que el logo (el calendario) esté centrado */
+.topnav .logo {
+  position: absolute; /* El logo debe estar centrado sin afectar los otros elementos */
+  left: 50%; /* Mover al 50% desde el lado izquierdo */
+  transform: translateX(-50%); /* Ajustar para que esté exactamente centrado */
+}
+
+/* Asegurar que los íconos en los botones estén alineados */
+.topnav .openbtn,
+.topnav .configbtn {
+  display: inline-block;
+}
+
+/* Estilo para los íconos */
+.topnav i {
+  font-size: 24px; /* Ajustar tamaño del ícono */
+  color: #ffffff; /* Cambiar el color del ícono */
+}
+
+/*seccion de planificaciones creadas ( visualizador)*/
+
+.custom-modal-header {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los elementos */
+  justify-content: flex-start; /* Alinea el contenido al inicio (izquierda) */
+  padding: 10px 15px; /* Añade espacio alrededor del contenido */
+}
+
+.modal-title {
+  margin-left: 30px; /* Agrega espacio suficiente para que no se superponga */
+}
+
+/* Sección Mis Planificaciones */
+#misPlanificaciones {
+  margin-top: 20px;
+}
+
+/* Mensaje de no planificaciones */
+#noPlanificaciones {
+  color: #555;
+  font-size: 1.1em;
+}
+
+/* Estilos para cada planificación */
+.planificacion {
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.planificacion:hover {
+  transform: translateY(-4px);
+}
+
+.planificacion .card-title {
+  font-size: 1.25em;
+  font-weight: bold;
+  color: #333;
+}
+
+.planificacion .card-text {
+  font-size: 0.95em;
+  color: #666;
+}
+
+.navbar .btn-outline-primary {
+  margin-top: 10px;
+  color: #002b80; /* Azul más oscuro para mejor contraste */
+  background-color: #ffffff; /* Fondo blanco */
+  border-color: #002b80; /* Borde azul oscuro */
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.navbar .btn-outline-primary:hover {
+  color: #ffffff; /* Texto blanco */
+  background-color: #002b80; /* Fondo azul oscuro */
+  border-color: #002b80; /* Borde del mismo color */
+}
+
+/* Estilos para mensajes de alerta */
+.alert {
+  border-radius: 5px;
+  font-size: 1.2rem;
+  text-align: center;
+  padding: 10px;
+  width: 100%; /* Ocupa el ancho del contenedor */
+}
+
+.alert-success {
+  background-color: #08c202; /* Verde claro */
+  color: #ffffff; /* Verde oscuro */
+}
+
+.btn-success {
+  background-color: #218838;
+  color: #ffffff;
+}
+
+.btn-success:hover {
+  background-color: #1e7e34;
+}
+
+.alert-danger {
+  background-color: #ff0000; /* Rojo claro */
+  color: #ffffff; /* Rojo oscuro */
+}
+
+#guardar {
+  margin-top: 20px; /* Espaciado superior */
+}
+
+#guardar1 {
+  margin-top: 0; /* Elimina el margen superior del botón */
+  margin-bottom: 0; /* Elimina el margen inferior del botón si es necesario */
+}
+
+#guardar2 {
+  margin-top: 20px; /* Espaciado superior */
+}
+
+.infoDeBloquesAlCrear {
+  margin-top: 0; /* Elimina el margen superior del texto */
+  margin-bottom: 0; /* Elimina el margen inferior del texto */
+}
+
+/* Estilo opcional para personalizar la alerta de advertencia */
+#noPlanificaciones.alert-warning {
+  font-size: 1.1em;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(255, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* Resaltar el mensaje de advertencia */
+.highlight-warning {
+  background-color: #fff3cd; /* Color de fondo estándar de alert-warning */
+  border: 2px solid #ffc107; /* Borde de color amarillo para mayor contraste */
+  border-radius: 8px;
+  box-shadow: 0 6px 12px rgba(255, 193, 7, 0.3); /* Sombra suave y llamativa */
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Efecto de agrandamiento en hover para atraer la atención */
+.highlight-warning:hover {
+  transform: scale(1.03);
+  box-shadow: 0 8px 16px rgba(255, 193, 7, 0.5); /* Sombra más intensa en hover */
+}
+
+/* Estilo para detalles */
+.plan-content {
+  display: none;
+  margin-bottom: 20px;
+}
+
+.plan-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.plan-blocks {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+/* Modal de planificación (sin Bootstrap) */
+#planificacionModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 1000;
+}
+
+#planificacionModal.active {
+  display: block;
+}
+
+#planificacionModal .modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 10px;
+  font-size: 1.25rem;
+  color: #333;
+}
+
+#planificacionModal .modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #004fa3;
+}
+
+#planificacionModal .btn-close {
+  background-color: transparent;
+  border: none;
+  font-size: 1.25rem;
+  cursor: pointer;
+}
+
+#planificacionModal .modal-body {
+  padding-top: 20px;
+  color: #555;
+}
+
+/* Botones */
+.modal-footer {
+  border-top: 2px solid #007bff;
+  padding-top: 10px;
+}
+
+.modal-footer .btn {
+  padding: 8px 20px;
+  font-size: 1rem;
+}
+
+.btn-secondary {
+  background-color: #6c757d;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+}
+
+.btn-primary {
+  background-color: #0056b3;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #003f7f;
+}
+
+.btn-confirm {
+  background-color: #0056b3;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  font-size: 1rem;
+  color: white;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+}
+
+.btn-confirm:hover {
+  background-color: #003f7f;
+  color: white;
+}
+
+#guardarEstructurado,
+#guardarLibre {
+  padding: 8px 16px; /* Ajusta el tamaño del botón a través del padding */
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  display: block;
+  margin: 0 auto; /* Centra el botón dentro del contenedor */
+}
+
+.bloques-contenido {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Clase para ocultar el texto visualmente */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#alertaDecidir {
+  position: absolute;
+  top: 5%; /* Ajusta este valor según lo necesites */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1050;
+  width: 90%;
+  max-width: 400px;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}

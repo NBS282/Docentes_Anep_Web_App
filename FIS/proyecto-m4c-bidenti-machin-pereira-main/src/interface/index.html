@@ -1,0 +1,1205 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Planificación Escolar</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <!-- Barra de Navegación -->
+    <div class="topnav">
+      <!--<button styleclass="openbtn" onclick="openMenu()">&#9776;</button>-->
+      <a
+        href="#"
+        class="logo"
+        onclick="showSection('misPlanificaciones1');mostrarBarra();cerrarModal()"
+        aria-label="Menu"
+        ><i class="fas fa-house centered-icon"></i
+      ></a>
+      <a
+        href="#"
+        class="configbtn"
+        onclick="openConfig();mostrarBarra()"
+        aria-label="Abrir configuración"
+      >
+        <i class="fas fa-cog"></i>
+      </a>
+    </div>
+
+    <nav
+      id="barraOpciones"
+      class="navbar navbar-light bg-light"
+      style="display: none"
+    >
+      <div class="d-flex justify-content-center w-100">
+        <!--<button class="btn btn-outline-primary mx-2" onclick="showSection('sigPlanificacion')">Crear Siguiente Planificacion</button>-->
+        <button
+          class="btn btn-outline-primary mx-2"
+          onclick="startPlanificacion();noMostrarBarra();cerrarModal()"
+        >
+          Crear Planificación
+        </button>
+      </div>
+    </nav>
+
+    <!-- Cubre toda la pantalla y es para difuminar el fondo al abrir menús -->
+    <div id="overlay"></div>
+
+    <!-- Menú -->
+    <!--<div id="Menu" class="menu">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeMenu()"
+        >&times;</a
+      >
+      <a href="#" onclick="startPlanificacion(); closeMenu()"
+        >Crear Planificación</a
+      >
+      <-- Modificado para usar startPlanificacion ->
+      <a href="#" onclick="showSection('misPlanificaciones');closeMenu()"
+        >Ver Planificaciones</a
+      >
+      <a href="#" onclick="showDiv('ultima')">Última</a>
+    </div>-->
+
+    <!--Crear Planificacion: -->
+
+    <!-- Paso 1: Seleccionar Curso -->
+    <div id="step1" class="content-section" style="display: none">
+      <button onclick="showSection('misPlanificaciones1');" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only btn-primary">Volver</span>
+      </button>
+      <h2>Selecciona un Curso</h2>
+      <div class="form-group">
+        <label for="curso">Curso:</label>
+        <select name="curso" id="curso" class="form-control">
+          <option value="0" disabled selected>Cursos...</option>
+          <option value="1">Primer Grado</option>
+          <!--
+                <option disabled selected>Seleccione un curso</option>
+                <option value="2">Primer Grado</option>
+                <option value="3">Segundo Grado</option>
+                <option value="4">Tercer Grado</option>
+                -->
+        </select>
+        <button
+          id="confirmarCurso"
+          class="btn btn-confirm btn-block"
+          onclick="confirmarP1()"
+        >
+          Confirmar
+        </button>
+        <p
+          id="infoDeConfP1"
+          class="alert alert-success d-none mt-3"
+          role="alert"
+        ></p>
+      </div>
+    </div>
+
+    <!-- Paso 2: Seleccionar Tipo de Planificación -->
+    <div id="step2" class="content-section planning-step" style="display: none">
+      <button onclick="showDiv('step1')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only">Volver</span>
+      </button>
+      <h2>Selecciona el Tipo de Planificación</h2>
+      <div class="button-container">
+        <button
+          class="btn btn-primary planning-button"
+          onclick="cambiarDiariaYCrearPlanificacion(true);cambiarCalendario(false);showDiv('step3')"
+        >
+          Diaria
+        </button>
+        <button
+          class="btn btn-primary planning-button"
+          onclick="cambiarDiariaYCrearPlanificacion(false);cambiarCalendario(true);showDiv('step3')"
+        >
+          Semanal
+        </button>
+      </div>
+    </div>
+
+    <!-- Paso 3: Elegir Fecha y Crear Bloques -->
+    <div id="step3" class="content-section planning-date" style="display: none">
+      <button onclick="showDiv('step2')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only">Volver</span>
+      </button>
+      <h2>Planificación <span id="planType"></span></h2>
+      <form action="#">
+        <div id="calendarContainer" style="display: none">
+          <!-- Calendario para planificación diaria -->
+          <label for="claendar" class="sr-only">calendar</label>
+          <input type="date" id="claendar" class="date-input" required />
+        </div>
+
+        <!-- Selector de semana -->
+
+        <div
+          id="weekSelector"
+          class="week-selector d-none d-md-flex justify-content-center align-items-center"
+          style="display: none"
+        >
+          <i class="fas fa-chevron-left previous-week-btn me-3"></i>
+          <div class="d-flex align-items-center">
+            <label for="start-date" class="sr-only">start-date</label>
+            <input
+              type="text"
+              id="start-date"
+              class="form-control text-center mx-2"
+              readonly
+            />
+            <span class="mx-2">-</span>
+            <label for="end-date" class="sr-only">end-date</label>
+            <input
+              type="text"
+              id="end-date"
+              class="form-control text-center mx-2"
+              readonly
+            />
+          </div>
+          <i class="fas fa-chevron-right next-week-btn ms-3"></i>
+        </div>
+
+        <!-- Vista de los días de la semana -->
+        <div
+          class="week-days"
+          id="week-days-container"
+          style="display: none"
+        ></div>
+
+        <div class="form-group">
+          <h3 class="bloques-contenido">Bloques de Contenido</h3>
+          <ul id="listaBloques" class="block-list">
+            <!-- Los bloques se añadirán aquí dinámicamente -->
+          </ul>
+          <button
+            id="crearBloque"
+            type="submit"
+            class="btn btn-secondary create-block-button"
+            onclick="showDiv('step4');"
+          >
+            Crear Bloque
+          </button>
+          <h4
+            id="infoDeBloques"
+            class="alert alert-success d-none mt-3"
+            role="alert"
+            aria-label="Información de bloques al crear"
+          ></h4>
+        </div>
+      </form>
+
+      <button
+        class="btn btn-success finalize-button"
+        id="finalizarPlanificacion"
+        onclick="verificacionDeBloques()"
+      >
+        Finalizar Planificación
+      </button>
+      <p
+        id="infoDeBloques"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      ></p>
+    </div>
+
+    <!--Diaria-->
+    <!-- Paso 4: Elegir Espacios y Unidades de Aprendizaje -->
+    <div id="step4Diaria" class="content-section" style="display: none">
+      <button onclick="showDiv('step3')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only btn-primary">Volver</span>
+      </button>
+      <h2>Bloque</h2>
+      <div class="form-group mb-4">
+        <h3 class="bloques-contenido">Espacio curricular:</h3>
+        <label for="espacio" class="sr-only">espacio</label>
+        <select name="espacios" id="espacio" class="form-control">
+          <option value="0" disabled selected>Espacios...</option>
+          <option value="cientifico">Científico Matemático</option>
+          <option value="comunicacion">Comunicación</option>
+          <option value="SyH">Ciencias Sociales y Humanidades</option>
+          <option value="creativoArtistico">Creativo Artístico</option>
+          <option value="devPerYConCor">
+            Desarrollo Personal y Conciencia Corporal
+          </option>
+          <option value="tec">Tecnología-Técnica</option>
+        </select>
+
+        <button
+          id="guardar"
+          class="btn btn-primary"
+          onclick="toggleCategories()"
+        >
+          Aceptar
+        </button>
+      </div>
+
+      <!-- Sección Científico -->
+      <div
+        id="cientifico"
+        class="categories"
+        style="display: none"
+        aria-live="polite"
+      >
+        <h3 class="bloques-contenido">
+          Unidades curriculares Científico Matemático
+        </h3>
+        <label for="unidadcientifico" class="sr-only">unidadcientifico</label>
+        <select id="unidadcientifico" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option>Matemáticas</option>
+          <option>Física y Química</option>
+          <option>Ciencias del Ambiente (Biología)</option>
+          <option>
+            Ciencias de la Tierra y el Espacio (Geología y Astronomía)
+          </option>
+        </select>
+      </div>
+
+      <!-- Otras categorías -->
+      <div
+        id="comunicacion"
+        class="categories"
+        style="display: none"
+        aria-live="polite"
+      >
+        <h3 class="bloques-contenido">Unidades de Comunicación</h3>
+        <label for="unidadcomunicacion" class="sr-only"
+          >unidadcomunicacion</label
+        >
+        <select id="unidadcomunicacion" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option>Lengua Española</option>
+          <option>Lenguas Extranjeras</option>
+        </select>
+      </div>
+
+      <div id="SyH" class="categories" style="display: none" aria-live="polite">
+        <h3 class="bloques-contenido">
+          Unidades curriculares de Ciencias Sociales y Humanidades
+        </h3>
+        <label for="unidadSyH" class="sr-only">unidadSyH</label>
+        <select id="unidadSyH" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option>Historia</option>
+          <option>Geografía</option>
+          <option>Formación para la Ciudadanía</option>
+        </select>
+      </div>
+
+      <div
+        id="creativoArtistico"
+        class="categories"
+        style="display: none"
+        aria-live="polite"
+      >
+        <h3 class="bloques-contenido">
+          Unidades curriculares Creativo Artístico
+        </h3>
+        <label for="unidadcreativoArtistico" class="sr-only"
+          >unidadcreativoArtistico</label
+        >
+        <select id="unidadcreativoArtistico" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option value="1">Artes Visuales</option>
+          <option>Literatura</option>
+          <option>Danza</option>
+          <option>Conocimiento Corporal</option>
+          <option>Música</option>
+          <option>Teatro</option>
+        </select>
+      </div>
+
+      <div
+        id="devPerYConCor"
+        class="categories"
+        style="display: none"
+        aria-live="polite"
+      >
+        <h3 class="bloques-contenido">
+          Unidades curriculares de Desarrollo Personal y Conciencia Corporal
+        </h3>
+        <label for="unidaddevPerYConCor" class="sr-only"
+          >unidaddevPerYConCor</label
+        >
+        <select id="unidaddevPerYConCor" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option value="1">Educación Física</option>
+        </select>
+      </div>
+
+      <div id="tec" class="categories" style="display: none" aria-live="polite">
+        <h3 class="bloques-contenido">
+          Unidades curriculares de Tecnología-Técnica
+        </h3>
+        <label for="unidadtec" class="sr-only">unidadtec</label>
+        <select id="unidadtec" class="form-control">
+          <option value="0" disabled selected>Unidades...</option>
+          <option value="1">
+            Ciencias de la Computación y Tecnología Educativa
+          </option>
+        </select>
+      </div>
+
+      <!-- Estructura de Selección de Planificación -->
+      <div id="estructuraPlanificacion" class="container mt-4">
+        <h3 class="bloques-contenido">
+          Seleccione la estructura de su planificación
+        </h3>
+        <label for="select_estructuraPlanificacion" class="sr-only"
+          >estructuras</label
+        >
+        <select id="select_estructuraPlanificacion" class="form-control">
+          <option value="0" disabled selected>Estructuras...</option>
+          <option value="1">Libre</option>
+          <option value="2">Estructurada</option>
+        </select>
+
+        <button
+          id="guardar2"
+          class="btn btn-primary"
+          onclick="mostrarDivPlanificacion()"
+        >
+          Aceptar
+        </button>
+      </div>
+
+      <!-- Libre -->
+      <div id="textoPlanificacion" class="container mt-4" style="display: none">
+        <h4 class="bloques-contenido">Titulo</h4>
+        <div class="mb-3">
+          <label for="tituloLibre" class="sr-only">titulo planificacion</label>
+          <input
+            type="text"
+            id="tituloLibre"
+            class="form-control w-100"
+            placeholder="Escriba el título de la planificación"
+          />
+        </div>
+        <h4 class="bloques-contenido">Escribe tu Planificación Aquí</h4>
+        <label for="planificacion" class="sr-only"
+          >textarea planificacion</label
+        >
+        <textarea
+          name="planificacion"
+          id="planificacion"
+          cols="30"
+          rows="10"
+          class="form-control w-100"
+        ></textarea>
+      </div>
+
+      <!-- Estructurada -->
+      <div
+        id="estructuradaPlanificacion"
+        class="container mt-4"
+        style="display: none"
+      >
+        <div class="mb-3">
+          <label for="tituloEstructurada" class="form-label">Titulo</label>
+          <input
+            type="text"
+            id="tituloEstructurada"
+            class="form-control w-100"
+            placeholder="Escriba el título de la planificación"
+          />
+        </div>
+        <div class="mb-3">
+          <label for="competenciasGenerales" class="form-label"
+            >Competencias Generales</label
+          >
+          <textarea id="competenciasGenerales" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="competenciasEspecificas" class="form-label"
+            >Competencias Específicas</label
+          >
+          <textarea
+            id="competenciasEspecificas"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="contenido" class="form-label">Contenido</label>
+          <textarea id="contenido" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="criteriosLogro" class="form-label"
+            >Criterios de Logro</label
+          >
+          <textarea id="criteriosLogro" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="metaAprendizaje" class="form-label"
+            >Meta de Aprendizaje</label
+          >
+          <textarea id="metaAprendizaje" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="planAprendizaje" class="form-label"
+            >Plan de Aprendizaje</label
+          >
+          <textarea id="planAprendizaje" class="form-control"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="fundamentacionDisciplinar" class="form-label"
+            >Fundamentación Disciplinar</label
+          >
+          <textarea
+            id="fundamentacionDisciplinar"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="fundamentacionDidactica" class="form-label"
+            >Fundamentación Didáctica</label
+          >
+          <textarea
+            id="fundamentacionDidactica"
+            class="form-control"
+          ></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="observaciones" class="form-label">Observaciones</label>
+          <textarea id="observaciones" class="form-control"></textarea>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div
+        id="botonesEspacio"
+        class="d-flex justify-content-center gap-3 flex-wrap mt-4"
+      >
+        <!--
+        <button id="archivo" class="btn btn-primary" onclick="saveFile()">
+          Agregar Archivo
+        </button>
+        <button id="verarchivo" class="btn btn-primary" onclick="showFile()">
+          Ver Archivos
+        </button>-->
+        <button
+          id="guardar"
+          class="btn btn-primary"
+          onclick="verificacionCreacionDeBloque(false)"
+        >
+          Crear Bloque
+        </button>
+        <p
+          class="infoDeBloquesAlCrear alert alert-success d-none mt-3"
+          role="alert"
+        ></p>
+      </div>
+    </div>
+
+    <!-- Semanal -->
+    <div id="step4Semanal" class="content-section" style="display: none">
+      <!-- Cartel de alerta -->
+      <div id="alertaDecidir" class="d-none">
+        <h5 class="text-center mb-3">Atención</h5>
+        <p class="text-center">Los datos se perderán. ¿Deseas continuar?</p>
+        <div class="d-flex justify-content-around mt-3">
+          <button id="confirmarBtn" class="btn btn-danger">Continuar</button>
+          <button id="cancelarBtn" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </div>
+
+      <!--showDiv('step3')-->
+
+      <button onclick="mostrarVolverAlert()" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only">Volver</span>
+      </button>
+      <h2 id="diaSemana" aria-label="Título del día de la semana"></h2>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Científico Matemático
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalCientifico" class="sr-only"
+            >SemanalCientifico</label
+          >
+          <textarea
+            name="planificacion"
+            id="SemanalCientifico"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Comunicación
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalComunicacion" class="sr-only"
+            >SemanalComunicacion</label
+          >
+          <textarea
+            name="planificacion"
+            id="SemanalComunicacion"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Ciencias Sociales y Humanidades
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalSyH" class="sr-only">SemanalSyH</label>
+          <textarea
+            name="planificacion"
+            id="SemanalSyH"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Creativo Artístico
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalCreativoArtistico" class="sr-only"
+            >SemanalCreativoArtistico</label
+          >
+          <textarea
+            name="planificacion"
+            id="SemanalCreativoArtistico"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Desarrollo Personal y Conciencia Corporal
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalDevPerYConCor" class="sr-only"
+            >SemanalDevPerYConCor</label
+          >
+          <textarea
+            name="planificacion"
+            id="SemanalDevPerYConCor"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="form-group mb-4">
+        <h3 class="text-center fs-7 fs-md-6 mb-3 bloques-contenido">
+          Tecnología-Técnica
+        </h3>
+        <div id="textoPlanificacion" class="container mt-4">
+          <label for="SemanalTec" class="sr-only">SemanalTec</label>
+          <textarea
+            name="planificacion"
+            id="SemanalTec"
+            cols="20"
+            rows="3"
+            class="form-control w-100"
+            placeholder="Escribe tu Planificación Aquí"
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div
+        id="botonesEspacio"
+        class="flex-colum justify-content-center gap-2 flex-wrap mt-4"
+      >
+        <button
+          id="guardar1"
+          class="btn btn-primary"
+          onclick="verificacionCreacionDeBloque(true)"
+        >
+          Guardar
+        </button>
+        <p
+          class="infoDeBloquesAlCrear alert alert-success d-none mt-2"
+          role="alert"
+        ></p>
+      </div>
+    </div>
+
+    <!-- Configuración -->
+    <div id="Config" class="config">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeConfig()"
+        >&times;</a
+      >
+      <div class="config-section">
+        <span>CURSOS</span>
+        <a href="#" onclick="showDiv('agregarCurso');closeConfig()">Agregar</a>
+        <a href="#" onclick="showDiv('eliminarCurso');closeConfig()"
+          >Eliminar</a
+        >
+        <a href="#" onclick="showDiv('modificarCurso'); closeConfig()"
+          >Modificar</a
+        >
+      </div>
+      <div class="config-section">
+        <span>AYUDA</span>
+        <a href="#" onclick="showSection('tutorial');closeConfig()">Guia</a>
+      </div>
+    </div>
+
+    <!-- Agregar Curso -->
+    <div
+      id="agregarCurso"
+      class="content-section container my-4 p-4 border rounded shadow-sm"
+      style="display: none"
+    >
+      <form id="formAgregarCurso">
+        <h2 class="h4">Agregar Curso</h2>
+        <div class="form-group mb-3">
+          <label for="nombreCurso" class="form-label">Nombre del Curso:</label>
+          <input type="text" id="nombreCurso" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+          <label for="anoCurso" class="form-label" id="colegioCurso"
+            >Año:</label
+          >
+          <input type="number" id="anoCurso" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="agregarCurso()">
+          Agregar Curso
+        </button>
+        <h3
+          id="infoDeAgregado"
+          class="alert alert-success d-none mt-3"
+          role="alert"
+        >
+          Curso Agregado Exitosamente
+        </h3>
+      </form>
+    </div>
+
+    <!-- Eliminar Curso -->
+    <div
+      id="eliminarCurso"
+      class="content-section container my-4 p-4 border rounded shadow-sm"
+      style="display: none"
+    >
+      <h2 class="h4">Eliminar Curso</h2>
+      <div class="form-group mb-3">
+        <label for="cursoEliminar" class="form-label">Lista de Cursos</label>
+        <select name="curso" id="cursoEliminar" class="form-control">
+          <option value="0" disabled selected>Cursos...</option>
+          <!--Valor por defecto-->
+          <option value="1">Primer Grado</option>
+        </select>
+      </div>
+      <button class="btn btn-danger" onclick="eliminarCurso()">
+        Eliminar Curso
+      </button>
+      <h3
+        id="infoDeEliminado"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      >
+        Curso Eliminado Exitosamente
+      </h3>
+    </div>
+
+    <!-- Modificar Curso -->
+    <div
+      id="modificarCurso"
+      class="content-section container my-4 p-4 border rounded shadow-sm"
+      style="display: none"
+    >
+      <h2 class="h4">Modificar Curso</h2>
+      <form>
+        <div class="form-group mb-3">
+          <label for="cursoModificar" class="form-label">Lista de Cursos</label>
+          <select name="curso" id="cursoModificar" class="form-control">
+            <option value="0" disabled selected>Cursos...</option>
+            <!--<option value="1">Primer Grado</option>
+                    <option value="2">Segundo Grado</option>
+                    <option value="3">Tercer Grado</option>-->
+          </select>
+        </div>
+        <div class="form-group mb-3">
+          <label for="cursoModificarNombre" class="form-label"
+            >Nombre del Curso:</label
+          >
+          <input type="text" id="cursoModificarNombre" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+          <label for="cursoModificarAno" class="form-label">Año:</label>
+          <input
+            required
+            type="number"
+            id="cursoModificarAno"
+            class="form-control"
+          />
+        </div>
+      </form>
+      <button type="submit" class="btn btn-warning" onclick="modificarCurso()">
+        Modificar Curso
+      </button>
+      <p
+        id="infoDeModificado"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      ></p>
+    </div>
+
+    <section id="tutorial" class="contenido" style="display: none">
+      <h1 class="text-center mb-4">
+        Bienvenido a la Plataforma de Planificación Escolar
+      </h1>
+      <p class="lead text-center">
+        Sigue estos sencillos pasos para comenzar a usar la aplicación y
+        organizar tus planificaciones de forma rápida y sencilla.
+      </p>
+
+      <!-- Paso 1: Agregar Cursos -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <span><i class="fas fa-book"></i> Paso 1: Agregar Cursos</span>
+        </div>
+        <div class="card-body">
+          <p>
+            Para empezar, ve al menú y selecciona Crear para agregar los cursos
+            en los que vas a realizar la planificación. Aquí puedes ingresar el
+            nombre del curso, nivel y demás detalles importantes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Paso 2: Crear Planificaciones -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <span>
+            <i class="fas fa-calendar-plus"></i> Paso 2: Crear Planificaciones
+          </span>
+        </div>
+        <div class="card-body">
+          <p>
+            Una vez que hayas agregado los cursos, puedes comenzar a crear las
+            planificaciones diarias o semanales. En el menú, selecciona Crear
+            Planificación y elige el curso y el tipo de planificación que deseas
+            crear.
+          </p>
+        </div>
+      </div>
+
+      <!-- Paso 3: Seleccionar Bloques de Contenido -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <span>
+            <i class="fas fa-layer-group"></i> Paso 3: Seleccionar Bloques de
+            Contenido
+          </span>
+        </div>
+        <div class="card-body">
+          <p>
+            Durante la creación de una planificación, selecciona los bloques de
+            contenido y unidades de aprendizaje que se aplicarán en cada clase.
+            Esto te ayudará a organizar las actividades y objetivos para cada
+            sesión.
+          </p>
+        </div>
+      </div>
+
+      <!-- Paso 4: Imprimir o Compartir tu Planificación -->
+      <div class="card mb-3">
+        <div class="card-header">
+          <span>
+            <i class="fas fa-print"></i> Paso 4: Imprimir o Compartir tu
+            Planificación
+          </span>
+        </div>
+        <div class="card-body">
+          <p>
+            Una vez que hayas terminado de crear la planificación, puedes optar
+            por imprimir el documento, descargarlo en PDF , o incluso
+            compartirlo con otros maestros para facilitar el trabajo en equipo.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <main class="container my-5">
+      <section id="misPlanificaciones1" class="contenido">
+        <h2 class="text-center mb-4">Mis Planificaciones</h2>
+
+        <!-- Formulario de búsqueda responsivo -->
+        <div
+          id="busquedas"
+          class="search-container d-flex justify-content-center mb-4"
+          style="display: none"
+        >
+          <div class="row g-2 w-100" style="max-width: 800px">
+            <!-- Input de título -->
+            <div class="col-12 col-md-4">
+              <label for="searchTitulo" class="sr-only"
+                >Buscar por título</label
+              >
+              <input
+                type="text"
+                id="searchTitulo"
+                class="form-control"
+                placeholder="Buscar por título"
+              />
+            </div>
+            <!-- Select de tipo -->
+            <div id="busacadores" class="col-12 col-md-4">
+              <select
+                id="searchTipo"
+                class="form-select"
+                aria-label="Tipo de búsqueda"
+              >
+                <option value="0">Todos los tipos</option>
+                <option value="Diaria">Diaria</option>
+                <option value="Semanal">Semanal</option>
+              </select>
+            </div>
+            <!-- Input de fecha -->
+            <div class="col-12 col-md-4">
+              <label for="searchFecha" class="sr-only">Buscar por fecha</label>
+              <input
+                type="date"
+                id="searchFecha"
+                class="form-control"
+                placeholder="Buscar por fecha"
+              />
+            </div>
+
+            <!-- Botón de búsqueda, con separación adicional -->
+            <div class="col-12 col-md-4 offset-md-4 mt-3 mt-md-4">
+              <button
+                class="btn btn-primary w-100"
+                id="buscarBtn"
+                onclick="buscarPlanificaciones()"
+              >
+                Buscar
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje inicial de advertencia si no hay planificaciones, centrado -->
+        <div
+          id="noPlanificaciones"
+          class="alert alert-warning text-center highlight-warning mx-auto"
+          style="max-width: 600px"
+        >
+          <p class="lead">¡Vaya!, parece que no has creado una planificación</p>
+          <p>
+            Ve a
+            <a href="#" onclick="mostrarBarra()" class="btn btn-primary"
+              >Crear Planificación</a
+            >
+            y crea tu primera planificación.
+          </p>
+        </div>
+
+        <div
+          id="planificacionesContainer"
+          class="d-flex flex-wrap justify-content-start mt-4"
+          style="display: none"
+        >
+          <!-- Las cards se agregarán aquí dinámicamente -->
+        </div>
+
+        <!-- Modal de detalles de planificación -->
+        <div id="planificacionModal" class="custom-modal" style="display: none">
+          <div class="custom-modal-content">
+            <div class="custom-modal-header">
+              <button onclick="cerrarModal()" class="back-button">
+                <i class="fas fa-arrow-left"></i>
+                <span class="sr-only">Volver</span>
+              </button>
+              <span class="modal-title">Detalles de la Planificación</span>
+            </div>
+            <div id="planificacionVisulizador" class="modal-body">
+              <div id="BloqueContent">
+                <span class="bloques-contenido">Selecciona un Bloque</span>
+                <ul id="listaBloquesVisualizador" class="block-list">
+                  <!--
+        <li>
+          <h4>Bloque 1</h4>
+          <p>Unidad: Matemáticas</p>
+          <p>Contenido: Suma y Resta</p>
+          <p>Objetivo: Realizar operaciones básicas</p>
+        </li>
+        -->
+                </ul>
+
+                <!-- Contenedor de acciones para el bloque seleccionado -->
+                <div id="accionesBloque" style="display: none">
+                  <button class="btn btn-primary" id="verBloqueBtn">Ver</button>
+                  <button class="btn btn-warning" id="editarBloqueBtn">
+                    Editar
+                  </button>
+                  <button class="btn btn-danger" id="eliminarBloqueBtn">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Bloque Libre -->
+    <div id="bloqueLibre" class="content-section" style="display: none">
+      <button onclick="showSection('misPlanificaciones1')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only">Volver</span>
+      </button>
+      <div class="form-group mb-4">
+        <p id="espacioCurrL" class="bloques-contenido"></p>
+        <p id="unidadCurrL" class="bloques-contenido"></p>
+        <p id="tituloL" class="bloques-contenido"></p>
+        <label for="TxtPlanificacionL">Planificación</label>
+        <textarea id="TxtPlanificacionL" class="form-control w-100"></textarea>
+      </div>
+      <button
+        id="guardarLibre"
+        class="btn btn-primary"
+        onclick="guardarCambios()"
+        style="display: none"
+      >
+        Guardar Cambios
+      </button>
+      <p
+        id="infoDeModificadoLibre"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      ></p>
+    </div>
+
+    <!-- Estructurado, Visualizador de Bloque -->
+    <div id="bloqueEstructurado" class="content-section" style="display: none">
+      <button onclick="showSection('misPlanificaciones1')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only">Volver</span>
+      </button>
+      <div class="form-group mb-4">
+        <p id="espacioCurrE" class="bloques-contenido"></p>
+        <p id="unidadCurrE" class="bloques-contenido"></p>
+        <p id="tituloE" class="bloques-contenido"></p>
+
+        <label for="txtCompGeneralesE">Competencias Generales</label>
+        <textarea id="txtCompGeneralesE" class="form-control w-100"></textarea>
+        <label for="txtCompEspecificasE">Competencias Específicas</label>
+        <textarea
+          id="txtCompEspecificasE"
+          class="form-control w-100"
+        ></textarea>
+        <label for="txtContenidoE">Contenido</label>
+        <textarea id="txtContenidoE" class="form-control w-100"></textarea>
+        <label for="txtCriteriosLogroE">Criterios de Logro</label>
+        <textarea id="txtCriteriosLogroE" class="form-control w-100"></textarea>
+        <label for="txtMetaAprendizajeE">Meta de Aprendizaje</label>
+        <textarea
+          id="txtMetaAprendizajeE"
+          class="form-control w-100"
+        ></textarea>
+        <label for="txtPlanAprendizajeE">Plan de Aprendizaje</label>
+        <textarea
+          id="txtPlanAprendizajeE"
+          class="form-control w-100"
+        ></textarea>
+        <label for="txtFundamentacionDisciplinarE"
+          >Fundamentación Disciplinar</label
+        >
+        <textarea
+          id="txtFundamentacionDisciplinarE"
+          class="form-control w-100"
+        ></textarea>
+        <label for="txtFundamentacionDidacticaE"
+          >Fundamentación Didáctica</label
+        >
+        <textarea
+          id="txtFundamentacionDidacticaE"
+          class="form-control w-100"
+        ></textarea>
+        <label for="txtObservacionesE">Observaciones</label>
+        <textarea id="txtObservacionesE" class="form-control w-100"></textarea>
+      </div>
+      <button
+        id="guardarEstructurado"
+        class="btn btn-primary"
+        onclick="guardarCambios()"
+        style="display: none"
+      >
+        Guardar Cambios
+      </button>
+      <p
+        id="infoDeModificadoEsturcturada"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      ></p>
+    </div>
+
+    <!--Visualizador de Semanal-->
+    <div id="bloqueSemanal" class="content-section" style="display: none">
+      <button onclick="showSection('misPlanificaciones1')" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+        <span class="sr-only btn-primary">Volver</span>
+      </button>
+      <div class="form-group mb-4">
+        <label for="txtCietificoMat"
+          >Espacio Curricular Cientifico Matemático</label
+        >
+        <textarea id="txtCietificoMat" class="form-control w-100"></textarea>
+        <label for="txtComunicacion">Espacio Curricular de Comunicación</label>
+        <textarea id="txtComunicacion" class="form-control w-100"></textarea>
+        <label for="txtSyH"
+          >Espacio Curricular Ciencias Sociales y Humanidades</label
+        >
+        <textarea id="txtSyH" class="form-control w-100"></textarea>
+        <label for="txtCreativoArt"
+          >Espacio Curricular Creativo Artístico</label
+        >
+        <textarea id="txtCreativoArt" class="form-control w-100"></textarea>
+        <label for="txtDevPerYConCor"
+          >Espacio Curricular de Desarrollo Personal y Conciencia
+          Corporal</label
+        >
+        <textarea id="txtDevPerYConCor" class="form-control w-100"></textarea>
+        <label for="txtTec">Espacio Curricular Tecnología-Técnica</label>
+        <textarea id="txtTec" class="form-control w-100"></textarea>
+      </div>
+      <button
+        id="guardarSemanal"
+        class="btn btn-primary"
+        onclick="guardarCambios()"
+        style="display: none"
+      >
+        Guardar Cambios
+      </button>
+      <p
+        id="infoDeModificadoSemanal"
+        class="alert alert-success d-none mt-3"
+        role="alert"
+      ></p>
+    </div>
+
+    <script type="module" src="../domain/curso.js"></script>
+    <script type="module" src="../domain/bloque.js"></script>
+    <script type="module" src="../domain/listaCursos.js"></script>
+    <script type="module" src="../domain/planificaciones.js"></script>
+    <script type="module">
+      import {
+        agregarCurso,
+        closeConfig,
+        eliminarCurso,
+        modificarCurso,
+        openConfig,
+        savePlan,
+        savePlanSemanal,
+        showDiv,
+        showSection,
+        startPlanificacion,
+        toggleCategories,
+        mostrarDivPlanificacion,
+        modificarPlanificacion,
+        largoListaPlanificaciones,
+        cambiarDiariaYCrearPlanificacion,
+        noMostrarBarra,
+        mostrarBarra,
+        //agregarPlanificaciones,
+        mostrarPlanificaciones,
+        cambiarUltimoCurso,
+        mostrarDetalles,
+        cerrarModal,
+        guardarCambios,
+        //verBloque,
+        editarBloque,
+        buscarPlanificaciones,
+        verificacionDeBloques,
+        verificacionCreacionDeBloque,
+        //eliminarBloque,
+        verificacionDePlanificaciones,
+        cambiarCalendario,
+        confirmarP1,
+        mostrarVolverAlert,
+      } from "./main.js";
+      window.toggleCategories = toggleCategories;
+      window.agregarCurso = agregarCurso;
+      window.closeConfig = closeConfig;
+      window.eliminarCurso = eliminarCurso;
+      window.modificarCurso = modificarCurso;
+      window.openConfig = openConfig;
+      window.savePlan = savePlan;
+      window.savePlanSemanal = savePlanSemanal;
+      window.showDiv = showDiv;
+      window.showSection = showSection;
+      window.startPlanificacion = startPlanificacion;
+      window.mostrarDivPlanificacion = mostrarDivPlanificacion;
+      window.modificarPlanificacion = modificarPlanificacion;
+      window.largoListaPlanificaciones = largoListaPlanificaciones;
+      window.cambiarDiariaYCrearPlanificacion =
+        cambiarDiariaYCrearPlanificacion;
+      window.noMostrarBarra = noMostrarBarra;
+      window.mostrarBarra = mostrarBarra;
+      //window.agregarPlanificaciones = agregarPlanificaciones;
+      window.mostrarPlanificaciones = mostrarPlanificaciones;
+      window.cambiarUltimoCurso = cambiarUltimoCurso;
+      window.mostrarDetalles = mostrarDetalles;
+      window.cerrarModal = cerrarModal;
+      window.buscarPlanificaciones = buscarPlanificaciones;
+      //window.verBloque = verBloque;
+      window.editarBloque = editarBloque;
+      window.guardarCambios = guardarCambios;
+      window.verificacionDeBloques = verificacionDeBloques;
+      window.verificacionCreacionDeBloque = verificacionCreacionDeBloque;
+      //window.eliminarBloque = eliminarBloque;
+      window.cambiarCalendario = cambiarCalendario;
+      window.verificacionDePlanificaciones = verificacionDePlanificaciones;
+      window.confirmarP1 = confirmarP1;
+      window.mostrarVolverAlert = mostrarVolverAlert;
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!--Animaciones-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Importa moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  </body>
+</html>
